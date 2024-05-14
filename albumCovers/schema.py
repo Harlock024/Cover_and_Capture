@@ -8,21 +8,19 @@ from .spotify_utils import obtener_portada_album
 class AlbumCoverType(DjangoObjectType):
     class Meta:
         model = AlbumCover
-        fields = "__all__"
 
 class VoteType(DjangoObjectType):
     class Meta:
         model = Vote
 
 class Query(graphene.ObjectType):
-
     album_covers = graphene.List(AlbumCoverType)
-    Vote = graphene.List(VoteType)
+    votes = graphene.List(VoteType)
     
     def resolve_album_covers(self, info):
         return AlbumCover.objects.all()
     
-    def resolve_Vote(self, info, **kwargs):
+    def resolve_votes(self, info, **kwargs):
         return Vote.objects.all()
     
 class CreateAlbumCover(graphene.Mutation):
@@ -34,8 +32,9 @@ class CreateAlbumCover(graphene.Mutation):
     class Arguments:
         album_name = graphene.String()
         Artist = graphene.String()
+
     def mutate(self, info, album_name, Artist):
-        user = info.context.user
+        user = info.context.user or None
 
         cover_url=obtener_portada_album(Artist,album_name)
         if not cover_url:
@@ -51,10 +50,10 @@ class CreateAlbumCover(graphene.Mutation):
 
         return CreateAlbumCover(
             id=album_cover.id,
-            album_name=album_name,
-            Artist=Artist,
+            album_name=album_cover.album_name,
+            Artist=album_cover.Artist,
             cover_url=cover_url,
-            posted_by=album_cover.posted_by
+            posted_by=user
         )
     
 class mutation(graphene.ObjectType):

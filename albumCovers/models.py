@@ -10,11 +10,9 @@ class AlbumCover(models.Model):
    
    class Meta:
       ordering = ['-created_at']
-
-
 posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-class Vote (models.Model):
+class Vote(models.Model):
    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
    album_cover = models.ForeignKey(AlbumCover, related_name='votes', on_delete=models.CASCADE)
 
