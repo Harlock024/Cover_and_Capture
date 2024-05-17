@@ -1,9 +1,9 @@
 from  .spotify_auth import sp
 
-def obtener_portada_album(artist_name, album_name):
+def obtener_portada_album(artist_name, albumName):
     try:
       
-        results = sp.search(q=f'artist:{artist_name} album:{album_name}', type='album', limit=1)
+        results = sp.search(q=f'artist:{artist_name} album:{albumName}', type='album', limit=1)
         items = results['albums']['items']
         if items:
            
@@ -16,4 +16,3 @@ def obtener_portada_album(artist_name, album_name):
         print("Error al buscar el álbum:", e)
         return None
     
-
